@@ -26,8 +26,8 @@ class _NavegadorState extends State<Navegador>{
   @override
   void initState(){
     super.initState();
-    _pantallas.add(const Bienvenido(title: "Persistencia de datos"));
     _pantallas.add(const Calculadora(title: "Calcula"));
+    _pantallas.add(const Bienvenido(title: "Persistencia de datos"));
     _pantallas.add(const Otra(title: "Adios a todos!!!!"));
     _pantallas.add(const MyHomePage(title: "Hola a todos!!!!"));
     _cuerpo = _pantallas[_p];
@@ -42,8 +42,8 @@ class _NavegadorState extends State<Navegador>{
         currentIndex: _p,
         onTap: (value) => _cambiaPantalla(value),
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(label:"Bienvenido",icon: Icon(Icons.home,)),
             BottomNavigationBarItem(label:"calculadora",icon: Icon(Icons.calculate_outlined,)),
+            BottomNavigationBarItem(label:"Bienvenido",icon: Icon(Icons.home,)),
             BottomNavigationBarItem(label:"saludo",icon: Icon(Icons.handshake_outlined,)),
             BottomNavigationBarItem(label:"principal",icon: Icon(Icons.accessibility_sharp,)),
       ]),

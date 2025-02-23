@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 
 class Calculadora extends StatefulWidget {
@@ -11,46 +9,101 @@ class Calculadora extends StatefulWidget {
 }
 
 class _CalculadoraState extends State<Calculadora> {
-  double _total = 0 ;
-  double _total2 = 0 ;
-  int _contadorP = 10;
+
+  //          Mi propio código
+  //            Declaración de variables a usar
   bool _punto = false;
-  void _presionaNumero(int n){
+  String _texto1= "0";
+  String _texto2 = "0";
+  double? _valor1 = null;
+  double? _valor2 = null;
+  bool _nuevoNumero = false; // Nuevo flag para saber cuándo reiniciar _texto1
+
+  void _presionaSimbolo(String a) {
     setState(() {
-      if(!_punto) _total = _total*10 + n;
-      else {
-        if(n == 0){
-          _contadorP*=10;
-        }else{
-          _total = _total + (n/_contadorP);
-          _contadorP*=10;
+      if (a == "." && !_punto) {
+        _punto = true;
+        _texto1 += ".";
+        return;
+      }
+      if(a == "+"){
+        _valor1 = double.tryParse(_texto1);
+        if(_valor2 == null){
+          _valor2 = _valor1;
+          _texto1 = "0";
+          _texto2 = _valor2.toString();
+        }else if(!_nuevoNumero){
+          _valor1 = _valor1! + _valor2!;
+          _texto2 = _valor1.toString();
+          print("${_valor1} y ${_valor2}");
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+        }
+      }
+      if(a == "-"){
+        _valor1 = double.tryParse(_texto1);
+        if(_valor2 == null){
+          _valor2 = _valor1;
+          _texto1 = "0";
+          _texto2 = _valor2.toString();
+        }else if(!_nuevoNumero){
+          _valor1 = _valor2! - _valor1!;
+          _texto2 = _valor1.toString();
+          print("${_valor1} y ${_valor2}");
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+        }
+      }
+      if(a == "x"){
+        _valor1 = double.tryParse(_texto1);
+        if(_valor2 == null){
+          _valor2 = _valor1;
+          _texto1 = "0";
+          _texto2 = _valor2.toString();
+        }else if(!_nuevoNumero){
+          _valor1 = _valor1! * _valor2!;
+          _texto2 = _valor1.toString();
+          print("${_valor1} y ${_valor2}");
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+        }
+      }
+      if(a == "/"){
+        _valor1 = double.tryParse(_texto1);
+        if(_valor2 == null){
+          _valor2 = _valor1;
+          _texto1 = "0";
+          _texto2 = _valor2.toString();
+        }else if(!_nuevoNumero){
+          _valor1 = _valor2! / _valor1!;
+          _texto2 = _valor1.toString();
+          print("${_valor1} y ${_valor2}");
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
         }
       }
     });
   }
-  void _presionaSimbolo(String a){
-    if (a == "."){
-      _punto = true;
-    }
-    if(a == '+'){
-      _punto = false;
-      _contadorP = 10;
-      setState(() {
-        _total2 += _total;
-        _total=0;
-      });
-    }
-    if(a == '='){
-      setState(() {
-        _total2 += _total;
-        _total=0;
-        _punto = false;
-        _contadorP = 10;
-      });
-    }
-    if(a == '/') {
-    }
+
+  void _presionaNumero(int n) {
+    setState(() {
+      if (_nuevoNumero) {
+        _texto1 = n.toString();
+        _nuevoNumero = false; // Se resetea para permitir concatenaciones normales
+      } else {
+        if (_texto1.length == 1 && _texto1 == "0") {
+          _texto1 = n.toString();
+        } else {
+          _texto1 += n.toString();
+        }
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +116,12 @@ class _CalculadoraState extends State<Calculadora> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
+
             Container(
               width: 320,
               color: Colors.deepPurple,
               height: 20,
-              child: Text("$_total2",
+              child: Text("$_texto2",
               textAlign: TextAlign.right,
                 style: TextStyle(fontSize: 10 ),
               ),
@@ -78,7 +131,7 @@ class _CalculadoraState extends State<Calculadora> {
               width: 320,
               color: Color.fromRGBO(128, 71, 243, 0.30196078431372547),
               height: 40,
-              child: Text("${_total}",
+              child: Text("$_texto1",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 30),
               ),
