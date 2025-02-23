@@ -7,4 +7,6 @@ En este día vamos a hacer una calculadora con todo lo que hemos aprendido, he a
 ## Avances de la clse del 25/02/2024
 En este día haremos lo que viene siendo persistencia den datos con una libreria externa llamada
 shared_references en la que podremos escribir variables de entorno global y persistentes que no se eliminan
-al refrescar la pagina
+al refrescar la pagina.
+### TODO
+### Aun no he acabado la calculadora
