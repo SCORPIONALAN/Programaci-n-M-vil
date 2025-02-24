@@ -15,6 +15,7 @@ class _CalculadoraState extends State<Calculadora> {
   bool _punto = false;
   String _texto1= "0";
   String _texto2 = "0";
+  String _lastChar = "";
   double? _valor1 = null;
   double? _valor2 = null;
   bool _nuevoNumero = false; // Nuevo flag para saber cuándo reiniciar _texto1
@@ -40,6 +41,7 @@ class _CalculadoraState extends State<Calculadora> {
           _valor2 = _valor1;
           _nuevoNumero= true;
         }
+        _lastChar ="+";
       }
       if(a == "-"){
         _valor1 = double.tryParse(_texto1);
@@ -55,6 +57,7 @@ class _CalculadoraState extends State<Calculadora> {
           _valor2 = _valor1;
           _nuevoNumero= true;
         }
+        _lastChar ="-";
       }
       if(a == "x"){
         _valor1 = double.tryParse(_texto1);
@@ -70,6 +73,7 @@ class _CalculadoraState extends State<Calculadora> {
           _valor2 = _valor1;
           _nuevoNumero= true;
         }
+        _lastChar ="x";
       }
       if(a == "/"){
         _valor1 = double.tryParse(_texto1);
@@ -84,6 +88,49 @@ class _CalculadoraState extends State<Calculadora> {
           _texto1 = _valor1.toString();
           _valor2 = _valor1;
           _nuevoNumero= true;
+        }
+        _lastChar ="/";
+      }
+      //      En caso de ya no estar apretando más botones
+      if (a == "="){
+        switch(_lastChar){
+          case "":
+            _texto1= _valor1.toString();
+            break;
+          case "+":
+            _valor1 = double.tryParse(_texto1);
+            print("Antes de sumar ${_valor1} y ${_valor2}");
+            _valor1 = _valor1! + _valor2!;
+            _texto2 = _valor1.toString();
+            print("Cuando entra al igual ${_valor1} y ${_valor2}");
+            _texto1 = _valor1.toString();
+            _valor2 = _valor1;
+            _nuevoNumero= true;
+            break;
+          case "-":
+            _valor1 = double.tryParse(_texto1);
+            _valor1 = _valor2! - _valor1!;
+            _texto2 = _valor1.toString();
+            _texto1 = _valor1.toString();
+            _valor2 = _valor1;
+            _nuevoNumero= true;
+            break;
+          case "x":
+            _valor1 = double.tryParse(_texto1);
+            _valor1 = _valor1! * _valor2!;
+            _texto2 = _valor1.toString();
+            _texto1 = _valor1.toString();
+            _valor2 = _valor1;
+            _nuevoNumero= true;
+            break;
+          case "/":
+            _valor1 = double.tryParse(_texto1);
+            _valor1 = _valor2! / _valor1!;
+            _texto2 = _valor1.toString();
+            _texto1 = _valor1.toString();
+            _valor2 = _valor1;
+            _nuevoNumero= true;
+            break;
         }
       }
     });
