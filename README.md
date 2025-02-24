@@ -9,4 +9,4 @@ En este día haremos lo que viene siendo persistencia den datos con una libreria
 shared_references en la que podremos escribir variables de entorno global y persistentes que no se eliminan
 al refrescar la pagina.
 ### TODO
-### Aun no he acabado la calculadora
+### Ya acabe la calculadora, pero me falta hacer pruebas para ver si funciona como debe de
