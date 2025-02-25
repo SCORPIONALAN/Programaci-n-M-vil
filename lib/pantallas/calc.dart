@@ -19,137 +19,121 @@ class _CalculadoraState extends State<Calculadora> {
   double? _valor1 = null;
   double? _valor2 = null;
   bool _nuevoNumero = false; // Nuevo flag para saber cuándo reiniciar _texto1
+  bool _contadorSimbolo = false;
 
   void _presionaSimbolo(String a) {
     setState(() {
+      _valor1 = double.tryParse(_texto1);
+
+      // Manejo del punto decimal
       if (a == "." && !_punto) {
+        print("Entro");
         _punto = true;
-        _texto1 += ".";
-        return;
-      }
-      if(a == "+"){
-        _valor1 = double.tryParse(_texto1);
-        if(_valor2 == null){
-          _valor2 = _valor1;
-          _texto1 = "0";
-          _texto2 = _valor2.toString();
-        }else if(!_nuevoNumero){
-          _valor1 = _valor1! + _valor2!;
-          _texto2 = _valor1.toString();
-          print("${_valor1} y ${_valor2}");
-          _texto1 = _valor1.toString();
-          _valor2 = _valor1;
-          _nuevoNumero= true;
+        if (_texto1.isEmpty || _texto1 == "0" || (_contadorSimbolo && _texto1.isNotEmpty)) {
+          _texto1 = "0."; // Si no hay nada antes, inicia con "0."
+          print("Entro con 0");
+        } else if (!_texto1.contains(".")) {
+          _texto1 += "."; // Si ya hay un número, solo agrega el punto
+          print("Entro con otro numero");
         }
-        _lastChar ="+";
       }
-      if(a == "-"){
-        _valor1 = double.tryParse(_texto1);
-        if(_valor2 == null){
-          _valor2 = _valor1;
-          _texto1 = "0";
-          _texto2 = _valor2.toString();
-        }else if(!_nuevoNumero){
-          _valor1 = _valor2! - _valor1!;
-          _texto2 = _valor1.toString();
-          print("${_valor1} y ${_valor2}");
-          _texto1 = _valor1.toString();
-          _valor2 = _valor1;
-          _nuevoNumero= true;
-        }
-        _lastChar ="-";
-      }
-      if(a == "x"){
-        _valor1 = double.tryParse(_texto1);
-        if(_valor2 == null){
-          _valor2 = _valor1;
-          _texto1 = "0";
-          _texto2 = _valor2.toString();
-        }else if(!_nuevoNumero){
-          _valor1 = _valor1! * _valor2!;
-          _texto2 = _valor1.toString();
-          print("${_valor1} y ${_valor2}");
-          _texto1 = _valor1.toString();
-          _valor2 = _valor1;
-          _nuevoNumero= true;
-        }
-        _lastChar ="x";
-      }
-      if(a == "/"){
-        _valor1 = double.tryParse(_texto1);
-        if(_valor2 == null){
-          _valor2 = _valor1;
-          _texto1 = "0";
-          _texto2 = _valor2.toString();
-        }else if(!_nuevoNumero){
-          _valor1 = _valor2! / _valor1!;
-          _texto2 = _valor1.toString();
-          print("${_valor1} y ${_valor2}");
-          _texto1 = _valor1.toString();
-          _valor2 = _valor1;
-          _nuevoNumero= true;
-        }
-        _lastChar ="/";
-      }
-      //      En caso de ya no estar apretando más botones
-      if (a == "="){
-        switch(_lastChar){
-          case "":
-            _texto1= _valor1.toString();
-            break;
-          case "+":
-            _valor1 = double.tryParse(_texto1);
-            print("Antes de sumar ${_valor1} y ${_valor2}");
-            _valor1 = _valor1! + _valor2!;
-            _texto2 = _valor1.toString();
-            print("Cuando entra al igual ${_valor1} y ${_valor2}");
-            _texto1 = _valor1.toString();
-            _valor2 = _valor1;
-            _nuevoNumero= true;
-            break;
-          case "-":
-            _valor1 = double.tryParse(_texto1);
-            _valor1 = _valor2! - _valor1!;
-            _texto2 = _valor1.toString();
-            _texto1 = _valor1.toString();
-            _valor2 = _valor1;
-            _nuevoNumero= true;
-            break;
-          case "x":
-            _valor1 = double.tryParse(_texto1);
-            _valor1 = _valor1! * _valor2!;
-            _texto2 = _valor1.toString();
-            _texto1 = _valor1.toString();
-            _valor2 = _valor1;
-            _nuevoNumero= true;
-            break;
-          case "/":
-            _valor1 = double.tryParse(_texto1);
-            _valor1 = _valor2! / _valor1!;
-            _texto2 = _valor1.toString();
-            _texto1 = _valor1.toString();
-            _valor2 = _valor1;
-            _nuevoNumero= true;
-            break;
-        }
+
+      if (a == "+") _procesarOperacion("+");
+      if (a == "-") _procesarOperacion("-");
+      if (a == "x") _procesarOperacion("x");
+      if (a == "/") _procesarOperacion("/");
+
+      if (a == "=") {
+        _igualdades(_lastChar);
+        _contadorSimbolo = true;
       }
     });
+  }
+
+
+  void _procesarOperacion(String operador) {
+    if (!_contadorSimbolo) {
+      if (_lastChar.isNotEmpty && _lastChar != operador) _igualdades(_lastChar);
+
+      if (_valor2 == null) {
+        _valor2 = _valor1;
+        _texto1 = "0";
+        _texto2 = _valor2.toString();
+      } else if (!_nuevoNumero) {
+        _igualdades(operador);
+      }
+
+      _contadorSimbolo = true;
+    }
+    _lastChar = operador;
+    _punto = false;
   }
 
   void _presionaNumero(int n) {
     setState(() {
+      print("Cuando presionaste era ${_punto}");
+
       if (_nuevoNumero) {
-        _texto1 = n.toString();
-        _nuevoNumero = false; // Se resetea para permitir concatenaciones normales
-      } else {
-        if (_texto1.length == 1 && _texto1 == "0") {
+        if(_texto1 != "0."){
           _texto1 = n.toString();
-        } else {
+        }else{
           _texto1 += n.toString();
         }
+        _nuevoNumero = false;
+      } else {
+        if (_texto1 == "0" && n != 0) {
+          _texto1 = n.toString();
+        } else {
+          if(_texto1[0] != "0" || _punto ) _texto1 += n.toString();
+        }
       }
+      _contadorSimbolo = false;
     });
   }
+
+  void _igualdades(String simbolo){
+    {
+      switch(simbolo){
+        case "":
+          _texto1= _valor1.toString();
+          break;
+        case "+":
+          _valor1 = double.tryParse(_texto1);
+          _valor1 = _valor1! + _valor2!;
+          _texto2 = _valor1.toString();
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+          break;
+        case "-":
+          _valor1 = double.tryParse(_texto1);
+          _valor1 = _valor2! - _valor1!;
+          _texto2 = _valor1.toString();
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+          break;
+        case "x":
+          _valor1 = double.tryParse(_texto1);
+          _valor1 = _valor1! * _valor2!;
+          _texto2 = _valor1.toString();
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+          break;
+        case "/":
+          _valor1 = double.tryParse(_texto1);
+          _valor1 = _valor2! / _valor1!;
+          _texto2 = _valor1.toString();
+          _texto1 = _valor1.toString();
+          _valor2 = _valor1;
+          _nuevoNumero= true;
+          break;
+      }
+      _punto = false;
+    }
+  }
+
 
 
   @override
