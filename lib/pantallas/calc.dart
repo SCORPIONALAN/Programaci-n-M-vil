@@ -46,10 +46,10 @@ class _CalculadoraState extends State<Calculadora> {
       if (a == "=") {
         _igualdades(_lastChar);
         _contadorSimbolo = true;
+        _nuevoNumero = true;
       }
     });
   }
-
 
   void _procesarOperacion(String operador) {
     if (!_contadorSimbolo) {
