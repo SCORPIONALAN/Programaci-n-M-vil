@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Por cada click que des un richi del mundo muere',
+              'Da click en el boton',
             ),
             SizedBox(
               height: _counter.toDouble(),
