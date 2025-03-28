@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "645865522137",
+    "project_id": "programobil2860",
+    "storage_bucket": "programobil2860.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645865522137:android:7678c38be8168102ad8fc8",
+        "android_client_info": {
+          "package_name": "com.example.pagina_muestra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3RF4QdqyV0jFhIDKLVZI4ec8vOOKfI00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -7,63 +10,55 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  FirebaseFirestore db =
+      FirebaseFirestore.instance; //Instancia de la base de datos
+  void _leerDesdeLaBase() async {
+    DocumentSnapshot<Map<String, dynamic>> objeto =
+        await db.collection('sumador').doc('documento').get();
+    setState(() {
+      _counter = objeto.get('contador');
+    });
+  }
+
+  void _escribirDatos() async {
+    Map<String, int> objetoBD = {"contador": _counter};
+    await db.collection('sumador').doc('documento').set(objetoBD);
+  }
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter += 25;
+      _counter += 10;
     });
+    _escribirDatos();
   }
 
   void _decrementCounter() {
     Future.delayed(Duration(seconds: 1), () {
       setState(() {
-        _counter-=25;
+        _counter -= 10;
       });
+      _escribirDatos();
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    _leerDesdeLaBase();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
@@ -71,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(
               height: _counter.toDouble(),
-              child: Image.network("https://uploads-ssl.webflow.com/6377bf360873283fad488724/638ca82a95fb434e6f42a283_Flutter.png"),
+              child: Image.network(
+                  "https://uploads-ssl.webflow.com/6377bf360873283fad488724/638ca82a95fb434e6f42a283_Flutter.png"),
             ),
             Text(
               '$_counter',
@@ -81,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end, // Alinea los botones a la derecha
+        mainAxisAlignment:
+            MainAxisAlignment.end, // Alinea los botones a la derecha
         children: [
           FloatingActionButton(
             onPressed: _incrementCounter,

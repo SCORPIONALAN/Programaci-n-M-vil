@@ -9,3 +9,7 @@ calculadora totalmente funcional y sin errores.
 En este día haremos lo que viene siendo persistencia den datos con una libreria externa llamada
 shared_references en la que podremos escribir variables de entorno global y persistentes que no se eliminan
 al refrescar la pagina.
+
+## Clase 4 Dependencia nueva y base de datos
+En este dia hicimos uso de la libreria de geoLocator para dar informes de la longitud y latitud del dispositivo (De momento web y no programacion nativa).
+De igual forma hicimos las conexiones a la base de datos en este caso FireBase con FireStore para guardar colecciones, en este caso para guardar un estado persistente general a todos los dispositivo. Segui toda la documentacion de FireBase flutter y de FireStore para la lectura y manipulacion de las colecciones.

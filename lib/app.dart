@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pantallas/principal.dart';
 import 'navegador.dart';
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,8 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hola richi desde DART',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(
-            255, 0, 0, 1.0)),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromRGBO(255, 0, 0, 1.0)),
         useMaterial3: true,
       ),
       home: Navegador(),

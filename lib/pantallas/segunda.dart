@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Otra extends StatefulWidget {
   const Otra({super.key, required this.title});
   final String title;
-
   @override
   State<Otra> createState() => _OtraState();
 }
@@ -28,6 +27,7 @@ class _OtraState extends State<Otra> {
   void initState() {
     super.initState();
     _cargaPreferencias();
+
   }
 
 
